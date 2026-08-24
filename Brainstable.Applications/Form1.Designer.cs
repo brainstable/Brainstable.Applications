@@ -30,18 +30,15 @@
         {
             button1 = new Button();
             label1 = new Label();
-            numericUpDown1 = new NumericUpDown();
             label2 = new Label();
-            numericUpDown2 = new NumericUpDown();
             label3 = new Label();
-            numericUpDown3 = new NumericUpDown();
             label4 = new Label();
             label5 = new Label();
             dateTimePicker1 = new DateTimePicker();
             dateTimePicker2 = new DateTimePicker();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown3).BeginInit();
+            textBox1 = new TextBox();
+            textBox2 = new TextBox();
+            textBox3 = new TextBox();
             SuspendLayout();
             // 
             // button1
@@ -49,7 +46,7 @@
             button1.Location = new Point(272, 349);
             button1.Name = "button1";
             button1.Size = new Size(231, 63);
-            button1.TabIndex = 0;
+            button1.TabIndex = 5;
             button1.Text = "Сформировать";
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
@@ -63,16 +60,6 @@
             label1.TabIndex = 1;
             label1.Text = "Номер №:";
             // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Location = new Point(329, 83);
-            numericUpDown1.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
-            numericUpDown1.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(150, 27);
-            numericUpDown1.TabIndex = 2;
-            numericUpDown1.Value = new decimal(new int[] { 5, 0, 0, 0 });
-            // 
             // label2
             // 
             label2.AutoSize = true;
@@ -82,16 +69,6 @@
             label2.TabIndex = 3;
             label2.Text = "Номер за все время:";
             // 
-            // numericUpDown2
-            // 
-            numericUpDown2.Location = new Point(329, 133);
-            numericUpDown2.Maximum = new decimal(new int[] { 340, 0, 0, 0 });
-            numericUpDown2.Minimum = new decimal(new int[] { 305, 0, 0, 0 });
-            numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.Size = new Size(150, 27);
-            numericUpDown2.TabIndex = 4;
-            numericUpDown2.Value = new decimal(new int[] { 305, 0, 0, 0 });
-            // 
             // label3
             // 
             label3.AutoSize = true;
@@ -100,16 +77,6 @@
             label3.Size = new Size(36, 20);
             label3.TabIndex = 5;
             label3.Text = "Год:";
-            // 
-            // numericUpDown3
-            // 
-            numericUpDown3.Location = new Point(329, 38);
-            numericUpDown3.Maximum = new decimal(new int[] { 2026, 0, 0, 0 });
-            numericUpDown3.Minimum = new decimal(new int[] { 2025, 0, 0, 0 });
-            numericUpDown3.Name = "numericUpDown3";
-            numericUpDown3.Size = new Size(150, 27);
-            numericUpDown3.TabIndex = 6;
-            numericUpDown3.Value = new decimal(new int[] { 2025, 0, 0, 0 });
             // 
             // label4
             // 
@@ -134,7 +101,7 @@
             dateTimePicker1.Location = new Point(329, 185);
             dateTimePicker1.Name = "dateTimePicker1";
             dateTimePicker1.Size = new Size(198, 27);
-            dateTimePicker1.TabIndex = 9;
+            dateTimePicker1.TabIndex = 3;
             dateTimePicker1.Value = new DateTime(2025, 5, 20, 0, 0, 0, 0);
             // 
             // dateTimePicker2
@@ -142,30 +109,55 @@
             dateTimePicker2.Location = new Point(329, 231);
             dateTimePicker2.Name = "dateTimePicker2";
             dateTimePicker2.Size = new Size(198, 27);
-            dateTimePicker2.TabIndex = 10;
+            dateTimePicker2.TabIndex = 4;
             dateTimePicker2.Value = new DateTime(2025, 6, 30, 0, 0, 0, 0);
+            // 
+            // textBox1
+            // 
+            textBox1.BorderStyle = BorderStyle.FixedSingle;
+            textBox1.Location = new Point(329, 37);
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(198, 27);
+            textBox1.TabIndex = 0;
+            // 
+            // textBox2
+            // 
+            textBox2.BorderStyle = BorderStyle.FixedSingle;
+            textBox2.Location = new Point(329, 82);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new Size(198, 27);
+            textBox2.TabIndex = 1;
+            // 
+            // textBox3
+            // 
+            textBox3.BorderStyle = BorderStyle.FixedSingle;
+            textBox3.Location = new Point(329, 130);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new Size(198, 27);
+            textBox3.TabIndex = 2;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            Controls.Add(textBox3);
+            Controls.Add(textBox2);
+            Controls.Add(textBox1);
             Controls.Add(dateTimePicker2);
             Controls.Add(dateTimePicker1);
             Controls.Add(label5);
             Controls.Add(label4);
-            Controls.Add(numericUpDown3);
             Controls.Add(label3);
-            Controls.Add(numericUpDown2);
             Controls.Add(label2);
-            Controls.Add(numericUpDown1);
             Controls.Add(label1);
             Controls.Add(button1);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
+            MaximizeBox = false;
+            MinimizeBox = false;
             Name = "Form1";
+            StartPosition = FormStartPosition.CenterScreen;
             Text = "ФОРМИРОВАНИЕ БЮЛЛЕТЕНЕЙ";
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown3).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -174,14 +166,14 @@
 
         private Button button1;
         private Label label1;
-        private NumericUpDown numericUpDown1;
         private Label label2;
-        private NumericUpDown numericUpDown2;
         private Label label3;
-        private NumericUpDown numericUpDown3;
         private Label label4;
         private Label label5;
         private DateTimePicker dateTimePicker1;
         private DateTimePicker dateTimePicker2;
+        private TextBox textBox1;
+        private TextBox textBox2;
+        private TextBox textBox3;
     }
 }

@@ -13,9 +13,9 @@ namespace Brainstable.Applications
         private void button1_Click(object sender, EventArgs e)
         {
             var bulletin = new Bulletin();
-            bulletin.Number = (int)numericUpDown1.Value;
-            bulletin.NumberInYear = (int)numericUpDown2.Value;
-            bulletin.Year = (int)numericUpDown3.Value;
+            bulletin.Number = textBox3.Text.Trim();
+            bulletin.NumberInYear = textBox2.Text.Trim();
+            bulletin.Year = textBox1.Text.Trim();
             bulletin.FirstDate = dateTimePicker1.Value;
             bulletin.LastDate = dateTimePicker2.Value;
 
