@@ -1,6 +1,9 @@
 using Brainstable.Applications.Models;
+
 using DocumentFormat.OpenXml.Bibliography;
 using DocumentFormat.OpenXml.Packaging;
+
+using System.Diagnostics;
 
 namespace Brainstable.Applications.Services.Implementations;
 
@@ -14,6 +17,7 @@ public class BulletinService
     private const string TEMPLATE_FOLDER = "templates//";
     private readonly string outputDirectory;
     private readonly string outputBulletins;
+    private readonly string outputMerge;
 
     public BulletinService(Bulletin bulletin)
     {
@@ -22,9 +26,8 @@ public class BulletinService
         lastDate = bulletin.LastDate;
         
         outputBulletins = "Бюллетени";
-        outputDirectory = Path.Combine(outputBulletins, $"{bulletin.Year}-{bulletin.Number}");
-
-
+        outputDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), outputBulletins, $"{bulletin.Year}-{bulletin.Number}");
+        outputMerge = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), outputBulletins);
 
         Directory.CreateDirectory(outputBulletins);
     }
@@ -214,11 +217,12 @@ public class BulletinService
             subjectNamesData);
 
         // Объединение файлов
-        var isMerge = MergeFiles(outputDirectory, outputBulletins);
+        var isMerge = MergeFiles(outputDirectory, outputMerge);
 
         if (isMerge)
         {
-            MessageBox.Show($"Бюллетень №{_bulletin.Number} ({_bulletin.NumberInYear}) за {_bulletin.Year} год успешно сформирован", "Создание бюллетеня", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show($"Бюллетень №{_bulletin.Number} ({_bulletin.NumberInYear}) за {_bulletin.Year} год успешно сформирован.Файлы сохранились в папке: {outputMerge}", "Создание бюллетеня", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            Process.Start("explorer.exe", outputMerge);
         }
         else
         {
