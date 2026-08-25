@@ -22,18 +22,4 @@ public class AcceptedApplication
     //public string OriginatorIds { get; set; }
     public DateTime? DateAdguardRegistration { get; set; }
     public DateTime? DateAdguardExpertise { get; set; }
-
-    //// +) заявка опубликована ранее
-    //public bool PublicationAddmissionEarlier { get; set; }
-    //public bool PublicationAdguardEarlier { get; set; }
-
-    //// ++) заявка не подана
-    //public bool NotAddmissionSubmitted { get; set; }
-    //public bool NotAdguardSubmitted { get; set; }
-
-    //// *) Предоставляется временная правовая охрана?
-    //public int ApplicationAdmissionId { get; set; }
-    //public DateTime? DateAddmissionRegistration { get; set; }
-
-    //public DateTime? DateAddmissionExpertise { get; set; }
 }
