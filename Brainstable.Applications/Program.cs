@@ -1,5 +1,3 @@
-using Brainstable.Applications.Dto;
-
 namespace Brainstable.Applications
 {
     internal static class Program
@@ -13,7 +11,7 @@ namespace Brainstable.Applications
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(new FormViewPatents());
         }
     }
 }
