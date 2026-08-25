@@ -1,8 +1,4 @@
 using Brainstable.Applications.Models;
-
-using DocumentFormat.OpenXml.Bibliography;
-using DocumentFormat.OpenXml.Packaging;
-
 using System.Diagnostics;
 
 namespace Brainstable.Applications.Services.Implementations;
@@ -50,22 +46,22 @@ public class BulletinService
         DeleteAllFiles(outputDirectory, true);
 
         // ВСЕ НАЗВАНИЯ ФАЙЛОВ В ОДНОМ МЕСТЕ (используем одинаковые имена)
-        string titul = "0. Титул.docx";
-        string acceptedApps = "1.1 Заявки на выдачу патента.docx";
-        string proposedNames = "2.1 Предложенные названия.docx";
-        string approvedNames = "2.2 Одобренные названия.docx";
-        string proposalsChange = "2.3 Предложения по изменению одобренных названий.docx";
-        string approvedChange = "2.4 Одобренные изменения названий.docx";
-        string blockClassVariety = "2.5 Сводная таблица предложенных названий.docx";
-        string withdrawnApps = "3.1 Отозванные заявки.docx";
-        string decisionsApps = "4.5 Сорта и гибриды, включенные в реестр охраняемых.docx";
-        string rejectionApps = "4.6 Отклоненные заявки на выдачу патента.docx";
-        string subjectChangeds = "5.1 Изменения состава субъектов селекционных достижений.docx";
-        string licenceRegistrations = "7.1 Зарегистрированные лицензии.docx";
-        string licenceCanceled = "7.2 Аннулированные лицензии.docx";
-        string licenceTransfer = "7.4 Передача права.docx";
-        string subjectNames = "8. Субъекты.docx";
-        string endProtections = "6.1 Окончание охраны.docx";
+        var titul = "0. Титул.docx";
+        var acceptedApps = "1.1 Заявки на выдачу патента.docx";
+        var proposedNames = "2.1 Предложенные названия.docx";
+        var approvedNames = "2.2 Одобренные названия.docx";
+        var proposalsChange = "2.3 Предложения по изменению одобренных названий.docx";
+        var approvedChange = "2.4 Одобренные изменения названий.docx";
+        var blockClassVariety = "2.5 Сводная таблица предложенных названий.docx";
+        var withdrawnApps = "3.1 Отозванные заявки.docx";
+        var decisionsApps = "4.5 Сорта и гибриды, включенные в реестр охраняемых.docx";
+        var rejectionApps = "4.6 Отклоненные заявки на выдачу патента.docx";
+        var subjectChangeds = "5.1 Изменения состава субъектов селекционных достижений.docx";
+        var licenceRegistrations = "7.1 Зарегистрированные лицензии.docx";
+        var licenceCanceled = "7.2 Аннулированные лицензии.docx";
+        var licenceTransfer = "7.4 Передача права.docx";
+        var subjectNames = "8. Субъекты.docx";
+        var endProtections = "6.1 Окончание охраны.docx";
 
         // 0. Титул
         var replacements = new Dictionary<string, string>();
