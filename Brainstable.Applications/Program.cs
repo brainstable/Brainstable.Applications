@@ -1,17 +1,17 @@
-using Brainstable.Applications.Dto;
-
 namespace Brainstable.Applications
 {
+    /// <summary>
+    /// Точка входа приложения: инициализирует WinForms и открывает главную форму.
+    /// </summary>
     internal static class Program
     {
         /// <summary>
-        ///  The main entry point for the application.
+        /// Запускает приложение в STA-потоке, как требуется для WinForms.
         /// </summary>
         [STAThread]
         static void Main()
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            // Настройка приложения по умолчанию: масштабирование DPI, шрифт и стили WinForms.
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
         }

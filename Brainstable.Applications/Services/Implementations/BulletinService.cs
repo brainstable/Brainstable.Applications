@@ -3,31 +3,47 @@ using System.Diagnostics;
 
 namespace Brainstable.Applications.Services.Implementations;
 
+/// <summary>
+/// Оркестратор выпуска: создаёт документы всех разделов бюллетеня, склеивает их
+/// в один файл и открывает папку с результатом.
+///
+/// Разделы сохраняются в «Документы\Бюллетени\{год}-{сквозной номер}\»,
+/// итоговый файл — «Документы\Бюллетени\Бюллетень {год}-{номер в году}({сквозной номер}).docx».
+/// </summary>
 public class BulletinService
 {
     private readonly Bulletin _bulletin;
     private readonly DateTime firstDate;
     private readonly DateTime lastDate;
 
-    // Настройка путей
+    // Шаблоны копируются в выходную папку при сборке; путь задан относительно рабочей директории.
     private const string TEMPLATE_FOLDER = "templates//";
+
+    // Каталоги результата: папка выпуска, общая папка «Бюллетени» и итоговый документ.
     private readonly string outputDirectory;
     private readonly string outputBulletins;
     private readonly string outputMerge;
 
+    /// <summary>
+    /// Создаёт сервис для указанного выпуска и рассчитывает пути сохранения.
+    /// </summary>
+    /// <param name="bulletin">Реквизиты выпуска: год, номера и период отбора.</param>
     public BulletinService(Bulletin bulletin)
     {
         _bulletin = bulletin;
         firstDate = bulletin.FirstDate;
         lastDate = bulletin.LastDate;
         
+        // Основной результат — в «Моих документах», чтобы не зависеть от папки приложения.
         outputBulletins = "Бюллетени";
         outputDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), outputBulletins, $"{bulletin.Year}-{bulletin.Number}");
         outputMerge = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), outputBulletins);
 
+        // Наследие ранней версии: создаёт пустую папку «Бюллетени» в текущей рабочей директории.
         Directory.CreateDirectory(outputBulletins);
     }
 
+    /// <summary>Возвращает полный путь к файлу внутри папки выпуска.</summary>
     string GetPath(string fileName) => Path.Combine(outputDirectory, fileName);
 
     /// <summary>
@@ -35,14 +51,21 @@ public class BulletinService
     /// </summary>
     private bool ShouldGenerate<T>(IEnumerable<T> data) => data?.Any() == true;
 
+    /// <summary>
+    /// Формирует выпуск бюллетеня: загружает данные, создаёт документы разделов,
+    /// склеивает их в один файл и открывает папку с результатом.
+    /// Разделы без данных пропускаются, кроме справочных II.5 и VIII.1.
+    /// </summary>
     public void BuilderBulletin()
     {
         Directory.CreateDirectory(outputDirectory);
 
+        // Загружаем выгрузку SBAZA и готовим построитель разделов.
         var factory = new DataObjectFactory();
         var builderService = new BuilderService(factory);
         builderService.Load();
 
+        // Очищаем папку выпуска от результатов предыдущей генерации.
         DeleteAllFiles(outputDirectory, true);
 
         // ВСЕ НАЗВАНИЯ ФАЙЛОВ В ОДНОМ МЕСТЕ (используем одинаковые имена)
@@ -226,6 +249,10 @@ public class BulletinService
         }
     }
 
+    /// <summary>
+    /// Склеивает документы разделов в итоговый файл бюллетеня.
+    /// Возвращает false, если склейка не удалась.
+    /// </summary>
     private bool MergeFiles(string outputDirectory, string outputBulletins)
     {
         try
@@ -237,6 +264,7 @@ public class BulletinService
         }
         catch (Exception e)
         {
+            // Ошибку не пробрасываем: вызывающий код покажет предупреждение без деталей.
             return false;
         }
 
@@ -244,7 +272,8 @@ public class BulletinService
     }
 
     /// <summary>
-    /// Удаляет все файлы из директории с возможностью удаления поддиректорий
+    /// Удаляет все файлы из директории с возможностью удаления поддиректорий.
+    /// Ошибки удаления отдельных файлов игнорируются, чтобы генерация не прерывалась.
     /// </summary>
     private static int DeleteAllFiles(string directoryPath, bool deleteSubdirectories = false)
     {
