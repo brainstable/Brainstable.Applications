@@ -1,8 +1,12 @@
-﻿using Brainstable.Applications.Dto;
+using Brainstable.Applications.Dto;
 using CsvHelper.Configuration;
 
 namespace Brainstable.Applications.Infrastructure.CsvHelper;
 
+/// <summary>
+/// Сопоставление колонок файла СОРТ.csv со свойствами <see cref="VarietyDto"/>.
+/// Колонки И_СОРТА_20, CATEGORY и ШИФР в бюллетене не используются.
+/// </summary>
 internal class VarietyMap : ClassMap<VarietyDto>
 {
     public VarietyMap()
@@ -19,9 +23,7 @@ internal class VarietyMap : ClassMap<VarietyDto>
         // И_СОРТА_ЛАТ -> LatineName
         Map(m => m.LatineName).Name("И_СОРТА_ЛАТ");
 
-        // Н_СЕЛЕКЦИОННЫЙ -> SelectionNumber
+        // Н_СЕЛЕКЦИОННЫЙ -> SelectionNumber; поле может отсутствовать.
         Map(m => m.SelectionNumber).Name("Н_СЕЛЕКЦИОННЫЙ").Optional();
-
-        // Остальные поля (И_СОРТА_20, CATEGORY, ШИФР) игнорируем
     }
 }

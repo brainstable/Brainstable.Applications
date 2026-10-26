@@ -1,8 +1,11 @@
-﻿using Brainstable.Applications.Dto;
+using Brainstable.Applications.Dto;
 using CsvHelper.Configuration;
 
 namespace Brainstable.Applications.Infrastructure.CsvHelper;
 
+/// <summary>
+/// Сопоставление колонок файла ЗАЯВКА_ЗАЯВИТЕЛЬ.csv со свойствами <see cref="ApplicationApplicatorDto"/>.
+/// </summary>
 internal class ApplicationApplicatorMap : ClassMap<ApplicationApplicatorDto>
 {
     public ApplicationApplicatorMap()
@@ -13,7 +16,7 @@ internal class ApplicationApplicatorMap : ClassMap<ApplicationApplicatorDto>
         // Н_СУБЪЕКТА -> ApplicatorId
         Map(m => m.ApplicatorId).Name("Н_СУБЪЕКТА");
 
-        // ПРИОРИТЕТ -> Priority
+        // ПРИОРИТЕТ -> Priority (порядок вывода заявителей)
         Map(m => m.Priority).Name("ПРИОРИТЕТ");
     }
 }
