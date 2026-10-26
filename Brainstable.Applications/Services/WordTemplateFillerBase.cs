@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
@@ -11,6 +11,8 @@ namespace Brainstable.Applications.Services
     /// <remarks>
     /// Предоставляет общую логику для создания структурированных документов Word с группировкой данных и таблицами.
     /// Для использования необходимо унаследовать класс и реализовать абстрактные методы.
+    /// Шаблон уже содержит заголовок раздела и шапку таблицы; класс добавляет в конец документа
+    /// заголовки групп и строки данных, поэтому шапку нужно править вместе с набором колонок.
     /// </remarks>
     public abstract class WordTemplateFillerBase<T>
     {
@@ -284,7 +286,8 @@ namespace Brainstable.Applications.Services
         }
 
         /// <summary>
-        /// Создает таблицу с данными на основе переданных элементов
+        /// Создает таблицу с данными на основе переданных элементов.
+        /// Строка заголовков не создаётся: шапка таблицы уже находится в .docx-шаблоне.
         /// </summary>
         /// <param name="items">Коллекция элементов для отображения</param>
         /// <returns>Объект таблицы</returns>

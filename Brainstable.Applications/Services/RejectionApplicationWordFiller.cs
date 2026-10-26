@@ -1,9 +1,11 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 4.6 Отклоненные заявки на выдачу патента
+/// Заполнитель таблицы IV.2 «Отклонённые заявки на выдачу патента» (раздел IV).
+/// В колонке даты дополнительно выводится код причины отклонения в квадратных скобках.
+/// Шаблон: «4.6 Отклоненные заявки на выдачу патента.docx».
 /// </summary>
 public class RejectionApplicationWordFiller : WordTemplateFillerBase<RejectionApplication>
 {
@@ -91,6 +93,7 @@ public class RejectionApplicationWordFiller : WordTemplateFillerBase<RejectionAp
             case "Variety":
                 return new List<string> { item.VarietyName, item.SelectionNumber };
             case "Date":
+                // Дата отклонения и код причины в квадратных скобках.
                 return new List<string> { item.DateAdguardRejection.ToString("dd.MM.yyyy"), $"[ {item.CauseWithdrawal} ]" };
             default:
                 return new List<string>();

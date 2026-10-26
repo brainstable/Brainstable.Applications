@@ -1,9 +1,11 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 1.1 Заявки на выдачу патента
+/// Заполнитель таблицы IV.1 «Сорта и гибриды, включённые в реестр охраняемых» (раздел IV).
+/// В колонке даты выводится дата регистрации патента и его номер.
+/// Шаблон: «4.5 Сорта и гибриды, включенные в реестр охраняемых.docx».
 /// </summary>
 public class DecisionsApplicationWordFiller : WordTemplateFillerBase<DecisionsApplication>
 {

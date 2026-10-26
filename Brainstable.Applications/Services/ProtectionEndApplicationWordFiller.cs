@@ -1,11 +1,13 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 6.1 Окончание охраны
+/// Заполнитель таблицы VI.1 «Окончание охраны» (раздел VI).
+/// Выводит номер патента, заявителей, дату окончания охраны и её причину.
+/// Шаблон: «6.1 Окончание охраны.docx».
 /// </summary>
 public class ProtectionEndApplicationWordFiller : WordTemplateFillerBase<ProtectionEndApplication>
 {
@@ -63,7 +65,7 @@ public class ProtectionEndApplicationWordFiller : WordTemplateFillerBase<Protect
     }
 
     /// <summary>
-    /// Определяет структуру таблицы: 4 колонки
+    /// Определяет структуру таблицы: 6 колонок
     /// </summary>
     protected override List<TableColumnDefinition> GetTableColumns()
     {

@@ -1,9 +1,11 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 7.2 Аннулированные лицензии
+/// Заполнитель таблицы VII.2 «Аннулированные лицензии» (раздел VII).
+/// В колонке даты выводится дата аннулирования лицензии.
+/// Шаблон: «7.2 Аннулированные лицензии.docx».
 /// </summary>
 public class LicencesCanceledWordFiller : WordTemplateFillerBase<Licence>
 {
@@ -62,7 +64,7 @@ public class LicencesCanceledWordFiller : WordTemplateFillerBase<Licence>
     }
 
     /// <summary>
-    /// Определяет структуру таблицы: 4 колонки
+    /// Определяет структуру таблицы: 6 колонок
     /// </summary>
     protected override List<TableColumnDefinition> GetTableColumns()
     {

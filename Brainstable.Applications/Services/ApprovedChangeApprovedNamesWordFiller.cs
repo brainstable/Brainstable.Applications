@@ -1,9 +1,11 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 2.2 Одобренные названия
+/// Заполнитель таблицы II.4 «Одобренные изменения названий» (раздел II).
+/// Показывает прежнее и новое название сорта и дату предложения.
+/// Шаблон: «2.4 Одобренные изменения названий.docx».
 /// </summary>
 public class ApprovedChangeApprovedNamesWordFiller : WordTemplateFillerBase<ApprovedChangeApprovedName>
 {

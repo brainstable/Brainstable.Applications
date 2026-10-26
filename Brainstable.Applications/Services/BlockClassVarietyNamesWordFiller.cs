@@ -1,29 +1,38 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Brainstable.Applications.Services;
 
+/// <summary>
+/// Заполнитель таблицы II.5 «Сводная таблица предложенных названий» (раздел II).
+/// Для каждого блока классов выводит жирный заголовок и перечень названий сортов
+/// одной строкой, отсортированной по алфавиту.
+/// Шаблон: «2.5 Сводная таблица предложенных названий.docx».
+/// </summary>
 public class BlockClassVarietyNamesWordFiller
 {
     private const string FontName = "Times New Roman";
 
-    // Проценты ширины колонок
-    private const string Column1Width = "12";  // Номер заявки
-    private const string Column2Width = "28";  // Заявитель/Автор
-    private const string Column3Width = "40";  // Название/Селекционный номер
-    private const string Column4Width = "20";  // Дата регистрации
+    // Ширины колонок и отступы оставлены от прежней табличной вёрстки; сейчас не используются.
+    private const string Column1Width = "12";
+    private const string Column2Width = "28";
+    private const string Column3Width = "40";
+    private const string Column4Width = "20";
 
-    // Размеры шрифтов
-    private const string FontSizeNormal = "24";    // 12pt
-    private const string FontSizeSmall = "20";     // 10pt
+    // Размеры шрифтов в half-points: 24 = 12 pt, 20 = 10 pt.
+    private const string FontSizeNormal = "24";
+    private const string FontSizeSmall = "20";
 
-    // Отступы после заголовков
     private const string AfterHeaderBlock = "100";
     private const string AfterHeaderKind = "0";
     private const string AfterHeaderLatine = "240";
 
+    /// <summary>
+    /// Копирует шаблон и дописывает в конец блоки: заголовок блока классов
+    /// и строку названий сортов, входящих в блок.
+    /// </summary>
     public void FillWordTemplate(string templatePath, string outputPath, List<BlockClassVarietyName> applications)
     {
         // Копируем шаблон в выходной файл
@@ -55,6 +64,7 @@ public class BlockClassVarietyNamesWordFiller
         }
     }
 
+    /// <summary>Создаёт центрированный параграф с заданным форматированием.</summary>
     private Paragraph CreateCultureHeader(string text, bool isBold = false, bool isItalic = false, bool isUnderline = false, StringValue? afterValue = null)
     {
         var paragraph = new Paragraph();
@@ -117,6 +127,7 @@ public class BlockClassVarietyNamesWordFiller
         return paragraph;
     }
 
+    /// <summary>Создаёт пустой параграф-разделитель между блоками.</summary>
     private Paragraph CreateEmptyParagraph()
     {
         var paragraph = new Paragraph();

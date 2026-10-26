@@ -1,9 +1,11 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 2.3 Предложения по изменению одобренных названий
+/// Заполнитель таблицы II.2 «Одобренные названия» (раздел II).
+/// Выводит сорт, впервые включённый в реестр охраняемых, и его заявителей.
+/// Шаблон: «2.2 Одобренные названия.docx».
 /// </summary>
 public class ApprovedNamesWordFiller : WordTemplateFillerBase<ApprovedName>
 {
@@ -58,7 +60,7 @@ public class ApprovedNamesWordFiller : WordTemplateFillerBase<ApprovedName>
     }
 
     /// <summary>
-    /// Определяет структуру таблицы: 4 колонки
+    /// Определяет структуру таблицы: 3 колонки
     /// </summary>
     protected override List<TableColumnDefinition> GetTableColumns()
     {

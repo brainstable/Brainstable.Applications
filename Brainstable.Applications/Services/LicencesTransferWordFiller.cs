@@ -1,9 +1,11 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 7.4 Передача права
+/// Заполнитель таблицы VII.3 «Передача права» (раздел VII).
+/// Выводит стороны договора, его номер, дату регистрации и вид.
+/// Шаблон: «7.4 Передача права.docx».
 /// </summary>
 public class LicencesTransferWordFiller : WordTemplateFillerBase<TransferLicence>
 {
@@ -62,7 +64,7 @@ public class LicencesTransferWordFiller : WordTemplateFillerBase<TransferLicence
     }
 
     /// <summary>
-    /// Определяет структуру таблицы: 4 колонки
+    /// Определяет структуру таблицы: 7 колонок
     /// </summary>
     protected override List<TableColumnDefinition> GetTableColumns()
     {

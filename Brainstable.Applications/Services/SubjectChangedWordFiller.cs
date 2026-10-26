@@ -1,9 +1,11 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 1.1 Заявки на выдачу патента
+/// Заполнитель таблицы V.1 «Изменение состава субъектов селекционных достижений» (раздел V).
+/// Для каждого сорта выводятся исключённые и включённые субъекты и даты изменений.
+/// Шаблон: «5.1 Изменения состава субъектов селекционных достижений.docx».
 /// </summary>
 public class SubjectChangedWordFiller : WordTemplateFillerBase<SubjectChanged>
 {
@@ -59,7 +61,7 @@ public class SubjectChangedWordFiller : WordTemplateFillerBase<SubjectChanged>
     }
 
     /// <summary>
-    /// Определяет структуру таблицы: 4 колонки
+    /// Определяет структуру таблицы: 5 колонок
     /// </summary>
     protected override List<TableColumnDefinition> GetTableColumns()
     {

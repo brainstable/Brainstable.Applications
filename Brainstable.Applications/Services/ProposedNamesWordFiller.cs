@@ -1,9 +1,11 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 2.1 Предложенные названия
+/// Заполнитель таблицы II.1 «Предложенные названия» (раздел II).
+/// Показывает предыдущее и предложенное название, селекционный номер и дату предложения.
+/// Шаблон: «2.1 Предложенные названия.docx».
 /// </summary>
 public class ProposedNamesWordFiller : WordTemplateFillerBase<ProposedName>
 {

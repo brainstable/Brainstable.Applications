@@ -1,9 +1,11 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 7.1 Зарегистрированные лицензии
+/// Заполнитель таблицы VII.1 «Зарегистрированные лицензии» (раздел VII).
+/// Один патент — одна строка; сведения о лицензиях выводятся построчно внутри ячеек.
+/// Шаблон: «7.1 Зарегистрированные лицензии.docx».
 /// </summary>
 public class LicencesWordFiller : WordTemplateFillerBase<Licence>
 {
@@ -61,7 +63,7 @@ public class LicencesWordFiller : WordTemplateFillerBase<Licence>
     }
 
     /// <summary>
-    /// Определяет структуру таблицы: 4 колонки
+    /// Определяет структуру таблицы: 6 колонок
     /// </summary>
     protected override List<TableColumnDefinition> GetTableColumns()
     {

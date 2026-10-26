@@ -1,23 +1,30 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Brainstable.Applications.Services;
 
+/// <summary>
+/// Заполнитель таблицы VIII.1 «Список заявителей, авторов и патентообладателей» (раздел VIII).
+/// Своя вёрстка: две колонки без заголовков — номер субъекта (жирный, по правому краю)
+/// и наименование субъекта (мелкий шрифт).
+/// Шаблон: «8. Субъекты.docx».
+/// </summary>
 public class SubjectNamesWordFiller
 {
     private const string FontName = "Times New Roman";
 
-    // Проценты ширины колонок
-    private const string Column1Width = "10";  // Номер заявки
-    private const string Column2Width = "90";  // Заявитель/Автор
+    // Ширина колонок в процентах: номер субъекта и наименование.
+    private const string Column1Width = "10";
+    private const string Column2Width = "90";
 
-    // Размеры шрифтов
-    private const string FontSizeNormal = "18";    // 12pt
-    private const string FontSizeSmall = "16";     // 10pt
+    // Размеры шрифтов в half-points: 18 = 9 pt, 16 = 8 pt.
+    private const string FontSizeNormal = "18";
+    private const string FontSizeSmall = "16";
 
-    // Отступы после заголовков
-
+    /// <summary>
+    /// Копирует шаблон и дописывает в конец таблицу субъектов, отсортированных по номеру.
+    /// </summary>
     public void FillWordTemplate(string templatePath, string outputPath, List<SubjectName> subjectNames)
     {
         // Копируем шаблон в выходной файл
@@ -31,6 +38,7 @@ public class SubjectNamesWordFiller
         body!.AppendChild(CreateDataTable(subjectNames));
     }
 
+    /// <summary>Создаёт таблицу без границ: номер субъекта и его наименование.</summary>
     private Table CreateDataTable(List<SubjectName> applications)
     {
         var table = new Table();
@@ -75,6 +83,7 @@ public class SubjectNamesWordFiller
         return table;
     }
 
+    /// <summary>Создаёт строку таблицы: номер субъекта и наименование.</summary>
     private TableRow CreateDataRow(SubjectName app)
     {
         var row = new TableRow();
@@ -88,6 +97,7 @@ public class SubjectNamesWordFiller
         return row;
     }
 
+    /// <summary>Создаёт ячейку с выравниванием влево (наименование субъекта).</summary>
     private TableCell CreateDataCell(string text, string width = "auto", string fontSize = FontSizeNormal, bool underlineFirstLine = false, 
         bool italicSecondLine = false, bool isBold = false)
     {
@@ -187,6 +197,7 @@ public class SubjectNamesWordFiller
         cell.AppendChild(paragraph);
         return cell;
     }
+    /// <summary>Создаёт ячейку с выравниванием вправо (номер субъекта).</summary>
     private TableCell CreateDataCell2(string text, string width = "auto", string fontSize = FontSizeNormal, bool underlineFirstLine = false,
     bool italicSecondLine = false, bool isBold = false)
     {

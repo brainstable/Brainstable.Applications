@@ -1,9 +1,10 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 1.1 Заявки на выдачу патента
+/// Заполнитель таблицы III.1 «Отозванные заявки на выдачу патента» (раздел III).
+/// Шаблон: «3.1 Отозванные заявки.docx».
 /// </summary>
 public class WithdrawnApplicationWordFiller : WordTemplateFillerBase<WithdrawnApplication>
 {

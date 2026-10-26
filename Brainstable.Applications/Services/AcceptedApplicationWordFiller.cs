@@ -1,9 +1,11 @@
-﻿using Brainstable.Applications.Models;
+using Brainstable.Applications.Models;
 
 namespace Brainstable.Applications.Services;
 
 /// <summary>
-/// 1.1 Заявки на выдачу патента
+/// Заполнитель таблицы I.1 «Заявки на выдачу патента» (раздел I).
+/// Строки группируются по блоку реестра и роду, внутри группы сортируются по названию сорта.
+/// Шаблон: «1.1 Заявки на выдачу патента.docx».
 /// </summary>
 public class AcceptedApplicationWordFiller : WordTemplateFillerBase<AcceptedApplication>
 {

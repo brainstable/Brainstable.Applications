@@ -1,21 +1,36 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace Brainstable.Applications.Services;
 
+/// <summary>
+/// Склеивает все .docx-файлы каталога в один документ.
+///
+/// Первый файл берётся за основу, остальные вставляются в конец через механизм AltChunk
+/// с разрывом страницы. Итоговый документ окончательно собирается средствами Word при открытии.
+/// </summary>
 public sealed class WordDocumentMerger
 {
+    /// <summary>
+    /// Объединяет документы каталога в файл <paramref name="outputPath"/>.
+    /// Файлы обрабатываются в алфавитном порядке; сам итоговый файл из выборки исключается.
+    /// </summary>
+    /// <param name="directoryPath">Каталог с исходными .docx.</param>
+    /// <param name="outputPath">Путь к итоговому документу.</param>
+    /// <param name="searchPattern">Маска отбора файлов, по умолчанию все .docx.</param>
     public void MergeDirectory(
         string directoryPath,
         string outputPath,
         string searchPattern = "*.docx")
     {
+        // Проверяем входные параметры и наличие каталога.
         ArgumentException.ThrowIfNullOrWhiteSpace(directoryPath);
         ArgumentException.ThrowIfNullOrWhiteSpace(outputPath);
 
         if (!Directory.Exists(directoryPath))
             throw new DirectoryNotFoundException(directoryPath);
 
+        // Собираем исходные файлы, исключая сам итоговый документ, и сортируем по имени.
         var files = Directory
             .EnumerateFiles(directoryPath, searchPattern)
             .Where(x => !string.Equals(
@@ -35,6 +50,7 @@ public sealed class WordDocumentMerger
         if (!string.IsNullOrWhiteSpace(outputDirectory))
             Directory.CreateDirectory(outputDirectory);
 
+        // Удаляем предыдущий результат, чтобы не дописывать документы поверх старого файла.
         if (File.Exists(outputPath))
             File.Delete(outputPath);
 
@@ -65,11 +81,19 @@ public sealed class WordDocumentMerger
         mainPart.Document.Save();
     }
 
+    /// <summary>
+    /// Вставляет содержимое исходного документа в конец итогового:
+    /// сначала разрыв страницы, затем AltChunk с телом файла.
+    /// </summary>
+    /// <param name="destinationMainPart">Основная часть итогового документа.</param>
+    /// <param name="destinationBody">Тело итогового документа.</param>
+    /// <param name="sourcePath">Путь к вставляемому .docx.</param>
     private static void AddDocument(
         MainDocumentPart destinationMainPart,
         Body destinationBody,
         string sourcePath)
     {
+        // Создаём часть AltChunk и копируем в неё исходный документ.
         var altChunkPart = destinationMainPart.AddAlternativeFormatImportPart(
             AlternativeFormatImportPartType.WordprocessingML);
 
@@ -83,6 +107,7 @@ public sealed class WordDocumentMerger
         altChunk.Id = destinationMainPart.GetIdOfPart(
             altChunkPart);
 
+        // Перед вставляемым разделом ставим разрыв страницы.
         destinationBody.AppendChild(
             new Paragraph(
                 new Run(
