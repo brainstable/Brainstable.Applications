@@ -1,4 +1,4 @@
-﻿using Brainstable.Applications.Dto;
+using Brainstable.Applications.Dto;
 using Brainstable.Applications.Infrastructure.Reader;
 using Brainstable.Applications.Models;
 using Brainstable.Applications.Services.Interfaces;
@@ -7,10 +7,19 @@ using DocumentFormat.OpenXml.InkML;
 
 namespace Brainstable.Applications.Services.Implementations;
 
+/// <summary>
+/// Формирует модели разделов бюллетеня из загруженных DTO: фильтрует записи по периоду выпуска,
+/// подставляет названия блока реестра и рода, объединяет заявителей и авторов
+/// и накапливает список субъектов для раздела VIII.
+///
+/// Все выборки используют полуоткрытый интервал: firstDate &lt; дата &lt;= lastDate,
+/// то есть начальная дата в период не входит, конечная входит.
+/// </summary>
 internal class BuilderService
 {
     private readonly IDataObjectFactory _factory;
 
+    // Загруженные таблицы выгрузки; заполняются в Load().
     private List<ApplicationDto> applicationDtos = [];
     private Dictionary<int, VarietyDto> varietyDtos = [];
     private Dictionary<int, BlockDto> blockDtos = [];
@@ -21,6 +30,8 @@ internal class BuilderService
     private Dictionary<int, PatentDto> patentDtos = [];
     private List<BlockClassDto> blockClassDtos  = [];
     private List<SubjectChangeDto> subjectChangeDtos = [];
+
+    // Идентификаторы субъектов, встретившихся в разделах, и пары для сводной таблицы II.5.
     private HashSet<int> _subjectIds = [];
     HashSet<BlockClassVarietyName> _blockClassVarietyNames = [];
 
@@ -28,11 +39,16 @@ internal class BuilderService
     private List<LicenceDto> licenceDtos = [];
     private List<ContractDto> contractDtos = [];
 
+    /// <summary>Создаёт построитель разделов на основе фабрики данных.</summary>
     public BuilderService(IDataObjectFactory factory)
     {
         _factory = factory;
     }
 
+    /// <summary>
+    /// Загружает все CSV-таблицы, необходимые для разделов бюллетеня.
+    /// Вызывается один раз перед построением выпуска.
+    /// </summary>
     public void Load()
     {
         applicationDtos = _factory.CreateApplicationDtos();
@@ -50,6 +66,9 @@ internal class BuilderService
         contractDtos = _factory.CreateContractDtos();
     }
 
+    /// <summary>
+    /// Запоминает субъектов, встретившихся в разделе, чтобы затем вывести их в таблице VIII.1.
+    /// </summary>
     private void AddSubjects(IEnumerable<int> subjectIds)
     {
         foreach (var subjectId in subjectIds)
@@ -58,12 +77,19 @@ internal class BuilderService
         }
     }
 
+    /// <summary>
+    /// Возвращает накопленные пары «блок классов — название сорта»
+    /// для сводной таблицы II.5.
+    /// </summary>
     public List<BlockClassVarietyName> GetBlockClassVarietyNames()
     {
         return _blockClassVarietyNames.ToList();
     }
 
-    // Раздел 1 - 1 Принятые заявки на охрану
+    /// <summary>
+    /// Раздел I, таблица I.1 — принятые заявки: дата экспертизы попала в период,
+    /// заявка не отклонена и имеет тип 1.
+    /// </summary>
     public List<AcceptedApplication> GetAcceptedApplications(DateTime firstDate, DateTime lastDate)
     {
         var list = new List<AcceptedApplication>();
@@ -112,7 +138,10 @@ internal class BuilderService
         return list;
     }
 
-    // Раздел 2 - 2 Предложенные названия
+    /// <summary>
+    /// Раздел II, таблица II.1 — предложенные названия: дата изменения названия
+    /// попала в период и по сорту есть заявка типа 1.
+    /// </summary>
     public List<ProposedName> GetProposedNames(DateTime firstDate, DateTime lastDate)
     {
         var list = new List<ProposedName>();
@@ -161,7 +190,10 @@ internal class BuilderService
         return list;
     }
 
-    // Раздел 2 - 2 Одобренное название впервые включенного в реестр на охрану
+    /// <summary>
+    /// Раздел II, таблица II.2 — одобренные названия сортов, впервые включённых
+    /// в реестр охраняемых: дата начала охраны попала в период.
+    /// </summary>
     public List<ApprovedName> GetApprovedNames(DateTime firstDate, DateTime lastDate)
     {
         var list = new List<ApprovedName>();
@@ -206,7 +238,11 @@ internal class BuilderService
         return list;
     }
 
-    // Раздел 2 - 3 Предложения по изменению одобренных названий
+    /// <summary>
+    /// Раздел II, таблица II.3 — предложения по изменению одобренных названий:
+    /// дата изменения попала в период, по сорту есть патент и охрана началась
+    /// не позже конца периода.
+    /// </summary>
     public List<ProposalsChangeApprovedName> GetProposalsChangeApprovedNames(DateTime firstDate, DateTime lastDate)
     {
         var list = new List<ProposalsChangeApprovedName>();
@@ -269,7 +305,10 @@ internal class BuilderService
         return list;
     }
 
-    // Раздел 2 - 4 Одобренные изменения названий
+    /// <summary>
+    /// Раздел II, таблица II.4 — одобренные изменения названий: дата одобрения
+    /// попала в период, по сорту есть патент и охрана началась не позже конца периода.
+    /// </summary>
     public List<ApprovedChangeApprovedName> GetApprovedChangeApprovedNames(DateTime firstDate, DateTime lastDate)
     {
         var list = new List<ApprovedChangeApprovedName>();
@@ -332,7 +371,10 @@ internal class BuilderService
         return list;
     }
 
-    // Раздел 3 - 1 Отозванные заявки на охрану
+    /// <summary>
+    /// Раздел III, таблица III.1 — отозванные заявки: дата отклонения попала в период,
+    /// причина отклонения равна 1 (отзыв), тип заявки — 1.
+    /// </summary>
     public List<WithdrawnApplication> GetWithdrawnApplications(DateTime firstDate, DateTime lastDate)
     {
         var list = new List<WithdrawnApplication>();
@@ -375,7 +417,10 @@ internal class BuilderService
         return list;
     }
 
-    // Раздел 4 - 5 Сорта и породы, включенные в реестр охраняемых
+    /// <summary>
+    /// Раздел IV, таблица IV.1 — сорта и гибриды, включённые в реестр охраняемых:
+    /// дата начала действия патента попала в период.
+    /// </summary>
     public List<DecisionsApplication> GetDecisionsApplications(DateTime firstDate, DateTime lastDate)
     {
         var list = new List<DecisionsApplication>();
@@ -416,7 +461,10 @@ internal class BuilderService
         return list;
     }
 
-    // 4.6 Отклоненные заявки на выдачу патента
+    /// <summary>
+    /// Раздел IV, таблица IV.2 — отклонённые заявки на выдачу патента:
+    /// дата отклонения попала в период, причина отклонения — 2, 3, 5 или 7.
+    /// </summary>
     public List<RejectionApplication> GetRejectionApplications(DateTime firstDate, DateTime lastDate)
     {
         var list = new List<RejectionApplication>();
@@ -462,15 +510,21 @@ internal class BuilderService
         return list;
     }
 
-    // 5.1 Изменения состава субъектов селекционных достижений
+    /// <summary>
+    /// Раздел V, таблица V.1 — изменения состава субъектов селекционных достижений.
+    /// Строки группируются по сорту; изменения субъектов (замена, добавление, удаление)
+    /// накапливаются в <see cref="SubjectChanged.SubjectChangedItems"/> без дубликатов.
+    /// </summary>
     public List<SubjectChanged> GetSubjectChangeds(DateTime firstDate, DateTime lastDate)
     {
         var dict = new Dictionary<int, SubjectChanged>();
 
+        // Отбираем изменения по заявкам на патент; тип субъекта 5 в раздел не включается.
         foreach (var dto in subjectChangeDtos.Where(x => x.DateChanged > firstDate
                  && x.DateChanged <= lastDate && x.TypeApplication == 1
                  && x.TypeSubject != 5))
         {
+            // Первая запись по сорту создаёт строку раздела, остальные дополняют её.
             if (!dict.ContainsKey(dto.VarietyId))
             {
                 var variety = varietyDtos[dto.VarietyId];
@@ -574,6 +628,10 @@ internal class BuilderService
         return dict.Values.ToList();
     }
 
+    /// <summary>
+    /// Раздел VIII, таблица VIII.1 — список субъектов, встретившихся при построении
+    /// остальных разделов выпуска.
+    /// </summary>
     public List<SubjectName> GetSubjectNames()
     {
         var list = new List<SubjectName>();
@@ -592,8 +650,13 @@ internal class BuilderService
         return list;
     }
 
+    /// <summary>
+    /// Раздел VII, таблица VII.1 — зарегистрированные лицензии: дата регистрации
+    /// попала в период и лицензия ещё не аннулирована.
+    /// </summary>
     public List<Licence> GetLicences(DateTime firstDate, DateTime lastDate)
     {
+        // Ключ словаря — номер патента: все лицензии одного патента выводятся одной строкой.
         var dict = new Dictionary<int, Licence>();
 
         foreach (var dto in licenceDtos.Where(x => x.DateRegistration > firstDate && x.DateRegistration <= lastDate && !x.DateAnnulation.HasValue))
@@ -650,10 +713,15 @@ internal class BuilderService
         return dict.Values.ToList();
     }
 
+    /// <summary>
+    /// Раздел VII, таблица VII.2 — аннулированные лицензии: дата аннулирования
+    /// попала в период.
+    /// </summary>
     public List<Licence> GetCanceledLicences(DateTime firstDate, DateTime lastDate)
     {
         var dict = new Dictionary<int, Licence>();
 
+        // Для аннулированных лицензий признак — дата аннулирования в периоде.
         foreach (var dto in licenceDtos.Where(x => x.DateAnnulation.HasValue && x.DateAnnulation > firstDate && x.DateAnnulation <= lastDate))
         {
             var variety = varietyDtos[dto.VarietyId];
@@ -708,6 +776,10 @@ internal class BuilderService
         return dict.Values.ToList();
     }
 
+    /// <summary>
+    /// Раздел VII, таблица VII.3 — передача права: дата регистрации договора
+    /// попала в период и договор не аннулирован.
+    /// </summary>
     public List<TransferLicence> GetTransferLicences(DateTime firstDate, DateTime lastDate)
     {
         var list = new List<TransferLicence>();
@@ -745,6 +817,10 @@ internal class BuilderService
         return list;
     }
 
+    /// <summary>
+    /// Раздел VI, таблица VI.1 — окончание охраны: дата окончания действия патента
+    /// попала в период.
+    /// </summary>
     public List<ProtectionEndApplication> GetProtectionEndApplications(DateTime firstDate, DateTime lastDate)
     {
         var list = new List<ProtectionEndApplication>();
